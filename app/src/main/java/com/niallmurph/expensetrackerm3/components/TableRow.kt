@@ -1,9 +1,6 @@
 package com.niallmurph.expensetrackerm3.components
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,13 +19,14 @@ fun TableRow(label : String, hasArrow : Boolean = false, isDestructive : Boolean
 
     Row(
         modifier = Modifier
-            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
     ){
         Text(text = label,
             style = Typography.bodyMedium,
             color = textColour
         )
-        Spacer(modifier = Modifier.fillMaxWidth())
         if(hasArrow){
             Icon(painter = painterResource(id = R.drawable.ic_arrow_forward), contentDescription = "Forward chevron")
         }
