@@ -24,7 +24,7 @@ class SettingsScreen {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun Create(navController: NavController){
+    fun Create(navController: NavController) {
         Scaffold(
             topBar = {
                 SmallTopAppBar(
@@ -39,13 +39,19 @@ class SettingsScreen {
                     modifier = Modifier
                         .padding(innerPadding)
                 ) {
-                    Column(modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                        .clip(shape = RoundedCornerShape(6.dp))
-                        .background(BackgroundElevated)
-                        ){
-                        TableRow(label = "Categories", hasArrow = true)
+                    Column(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                            .clip(shape = RoundedCornerShape(6.dp))
+                            .background(BackgroundElevated)
+                    ) {
+                        TableRow(
+                            label = "Categories",
+                            hasArrow = true,
+                            onClick = {
+                                navController.navigate("settings/categories")
+                            })
                         TableRow(label = "Delete All Data", isDestructive = true)
                     }
                 }
