@@ -1,0 +1,45 @@
+package com.niallmurph.expensetrackerm3.components
+
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.niallmurph.expensetrackerm3.ui.theme.Primary
+import com.niallmurph.expensetrackerm3.ui.theme.TextPrimary
+
+@Composable
+fun UnstyledTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+        .padding(4.dp)
+        .defaultMinSize(minWidth = 80.dp, minHeight = 40.dp)
+        .wrapContentHeight(align = Alignment.CenterVertically),
+    textStyle: TextStyle,
+    cursorBrush : Brush = SolidColor(Primary),
+    keyboardOptions: KeyboardOptions
+) {
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        textStyle = textStyle.merge(
+            TextStyle(
+                color = TextPrimary,
+                fontSize = 16.sp
+            )
+        ),
+        keyboardOptions = keyboardOptions,
+        cursorBrush = cursorBrush
+    )
+}
