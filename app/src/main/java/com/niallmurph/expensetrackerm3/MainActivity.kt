@@ -15,9 +15,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.niallmurph.expensetrackerm3.screens.AddScreen
 import com.niallmurph.expensetrackerm3.screens.ExpensesScreen
 import com.niallmurph.expensetrackerm3.screens.SettingsScreen
 import com.niallmurph.expensetrackerm3.ui.theme.ExpenseTrackerM3Theme
+import com.niallmurph.expensetrackerm3.ui.theme.TopAppBarBackground
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -32,7 +34,7 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(
                     bottomBar = {
-                        NavigationBar {
+                        NavigationBar(containerColor = TopAppBarBackground) {
                             NavigationBarItem(
                                 selected = backStackEntry.value?.destination?.route.equals(ExpensesScreen().route),
                                 onClick = { navController.navigate(ExpensesScreen().route) },
@@ -106,7 +108,7 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier
                                         .fillMaxSize()
                                 ){
-                                    Greeting(name = "Add")
+                                    AddScreen().Create(navController = navController)
                                 }
                             }
                             composable("settings"){
