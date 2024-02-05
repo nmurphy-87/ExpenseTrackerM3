@@ -6,6 +6,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +30,10 @@ class AddScreen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Create(navController: NavController) {
+
+        val recurrenceList = listOf("None", "Daily", "Weekly", "Monthly", "Annually")
+        val selectedRecurrence = remember { mutableStateOf("None") }
+
         Scaffold(
             topBar = {
                 SmallTopAppBar(
@@ -64,7 +70,28 @@ class AddScreen {
                             )
                         }
                         Divider(startIndent = 16.dp, thickness = 1.dp, color = DividerColor)
-                        TableRow(label = "Recurrence")
+                        TableRow(label = "Recurrence") {
+                            var recurrenceMenuExpanded = remember { mutableStateOf(false) }
+                            TextButton(
+                                onClick = { recurrenceMenuExpanded.value = true }
+                            ) {
+                                Text(text = selectedRecurrence.value)
+                                DropdownMenu(
+                                    expanded = recurrenceMenuExpanded.value,
+                                    onDismissRequest = { recurrenceMenuExpanded.value = false }
+                                ) {
+                                    recurrenceList.forEach { it ->
+                                        DropdownMenuItem(
+                                            text = { Text(it) },
+                                            onClick = {
+                                                selectedRecurrence.value = it
+                                                recurrenceMenuExpanded.value = false
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+                        }
                         Divider(startIndent = 16.dp, thickness = 1.dp, color = DividerColor)
                         TableRow(label = "Date")
                         Divider(startIndent = 16.dp, thickness = 1.dp, color = DividerColor)
