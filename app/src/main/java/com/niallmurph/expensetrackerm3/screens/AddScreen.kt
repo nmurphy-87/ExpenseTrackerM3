@@ -1,13 +1,12 @@
 package com.niallmurph.expensetrackerm3.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
@@ -51,7 +50,8 @@ class AddScreen {
                             .background(BackgroundElevated)
                     ) {
                         TableRow(label = "Amount") {
-                            UnstyledBasicTextField(value = "Hello",
+                            UnstyledBasicTextField(
+                                value = "Hello",
                                 onValueChange = { newVal ->
 
                                 },
@@ -69,7 +69,8 @@ class AddScreen {
                         TableRow(label = "Date")
                         Divider(startIndent = 16.dp, thickness = 1.dp, color = DividerColor)
                         TableRow(label = "Note") {
-                            UnstyledDefaultTextField(value = "",
+                            UnstyledDefaultTextField(
+                                value = "",
                                 onValueChange = { newVal ->
 
                                 },
@@ -84,6 +85,18 @@ class AddScreen {
                         }
                         Divider(startIndent = 16.dp, thickness = 1.dp, color = DividerColor)
                         TableRow(label = "Category")
+                    }
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(modifier = Modifier.height(32.dp))
+                        Button(
+                            onClick = { /*TODO*/ },
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text("Submit Expense")
+                        }
                     }
                 }
             }
