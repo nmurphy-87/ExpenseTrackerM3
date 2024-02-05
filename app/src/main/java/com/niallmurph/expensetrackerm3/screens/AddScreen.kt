@@ -16,7 +16,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.niallmurph.expensetrackerm3.components.TableRow
-import com.niallmurph.expensetrackerm3.components.UnstyledTextField
+import com.niallmurph.expensetrackerm3.components.UnstyledBasicTextField
+import com.niallmurph.expensetrackerm3.components.UnstyledDefaultTextField
 import com.niallmurph.expensetrackerm3.ui.theme.BackgroundElevated
 import com.niallmurph.expensetrackerm3.ui.theme.DividerColor
 import com.niallmurph.expensetrackerm3.ui.theme.TopAppBarBackground
@@ -50,7 +51,7 @@ class AddScreen {
                             .background(BackgroundElevated)
                     ) {
                         TableRow(label = "Amount") {
-                            UnstyledTextField(value = "Hello",
+                            UnstyledBasicTextField(value = "Hello",
                                 onValueChange = { newVal ->
 
                                 },
@@ -68,15 +69,16 @@ class AddScreen {
                         TableRow(label = "Date")
                         Divider(startIndent = 16.dp, thickness = 1.dp, color = DividerColor)
                         TableRow(label = "Note") {
-                            UnstyledTextField(value = "",
+                            UnstyledDefaultTextField(value = "",
                                 onValueChange = { newVal ->
 
                                 },
+                                placeholder = "Add notes",
                                 textStyle = TextStyle(
                                     textAlign = TextAlign.End
                                 ),
                                 keyboardOptions = KeyboardOptions(
-                                    keyboardType = KeyboardType.Number
+                                    keyboardType = KeyboardType.Text
                                 )
                             )
                         }
