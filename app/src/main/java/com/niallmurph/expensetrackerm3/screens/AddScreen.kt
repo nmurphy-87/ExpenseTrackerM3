@@ -1,7 +1,6 @@
 package com.niallmurph.expensetrackerm3.screens
 
 import android.os.Build
-import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -9,9 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -21,6 +18,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.marosseleng.compose.material3.datetimepickers.date.ui.dialog.DatePickerDialog
 import com.niallmurph.expensetrackerm3.components.TableRow
@@ -31,17 +29,20 @@ import com.niallmurph.expensetrackerm3.ui.theme.BackgroundElevated
 import com.niallmurph.expensetrackerm3.ui.theme.DividerColor
 import com.niallmurph.expensetrackerm3.ui.theme.Primary
 import com.niallmurph.expensetrackerm3.ui.theme.TopAppBarBackground
+import com.niallmurph.expensetrackerm3.viewmodels.AddViewModel
 import java.time.LocalDate
 import java.util.Calendar
 
-class AddScreen {
+class AddScree() {
 
     val route = "add"
 
     @RequiresApi(Build.VERSION_CODES.O)
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
     @Composable
-    fun Create(navController: NavController) {
+    fun Create(navController: NavController, addViewModel: AddViewModel = viewModel()) {
+
+        val state by addViewModel.uiState.collectAsState()
 
         val recurrenceList = listOf(
             Recurrence.None,
