@@ -1,5 +1,7 @@
 package com.niallmurph.expensetrackerm3.screens
 
+import android.app.DatePickerDialog
+import android.widget.DatePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -12,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -24,6 +27,7 @@ import com.niallmurph.expensetrackerm3.ui.theme.BackgroundElevated
 import com.niallmurph.expensetrackerm3.ui.theme.DividerColor
 import com.niallmurph.expensetrackerm3.ui.theme.Primary
 import com.niallmurph.expensetrackerm3.ui.theme.TopAppBarBackground
+import java.util.Calendar
 
 class AddScreen {
 
@@ -37,6 +41,30 @@ class AddScreen {
         val selectedRecurrence = remember { mutableStateOf("None") }
         val categories = listOf("Groceries", "Entertainment", "Wifi", "Electricity", "Heating")
         val selectedCategory = remember { mutableStateOf(categories[0]) }
+
+        val mContext = LocalContext.current
+
+        val mYear : Int
+        val mMonth : Int
+        val mDay : Int
+
+        val mCalendar = Calendar.getInstance()
+        mYear = mCalendar.get(Calendar.YEAR)
+        mMonth = mCalendar.get(Calendar.MONTH)
+        mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
+
+        var mDate = remember { mutableStateOf("${mCalendar.get(Calendar.MONTH) + 1}-${mCalendar.get(Calendar.DAY_OF_MONTH)}-${mCalendar.get(Calendar.YEAR)}") }
+
+        val mDatePicker = DatePickerDialog(
+            mContext,
+            { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
+                mDate.value = "${selectedMonth + 1}-${selectedDay}-${selectedYear}"
+            },
+            mYear,
+            mMonth,
+            mDay
+        )
+        mDatePicker.datePicker.maxDate = mCalendar.timeInMillis
 
         Scaffold(
             topBar = {
@@ -97,7 +125,11 @@ class AddScreen {
                             }
                         }
                         Divider(startIndent = 16.dp, thickness = 1.dp, color = DividerColor)
-                        TableRow(label = "Date")
+                        TableRow(label = "Date") {
+                            TextButton(onClick = { mDatePicker.show() }) {
+                                Text(mDate.value)
+                            }
+                        }
                         Divider(startIndent = 16.dp, thickness = 1.dp, color = DividerColor)
                         TableRow(label = "Note") {
                             UnstyledDefaultTextField(
