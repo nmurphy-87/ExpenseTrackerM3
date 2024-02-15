@@ -1,7 +1,8 @@
 package com.niallmurph.expensetrackerm3.screens
 
-import android.app.DatePickerDialog
+import android.os.Build
 import android.widget.DatePicker
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -20,24 +22,34 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.marosseleng.compose.material3.datetimepickers.date.ui.dialog.DatePickerDialog
 import com.niallmurph.expensetrackerm3.components.TableRow
 import com.niallmurph.expensetrackerm3.components.UnstyledBasicTextField
 import com.niallmurph.expensetrackerm3.components.UnstyledDefaultTextField
+import com.niallmurph.expensetrackerm3.models.Recurrence
 import com.niallmurph.expensetrackerm3.ui.theme.BackgroundElevated
 import com.niallmurph.expensetrackerm3.ui.theme.DividerColor
 import com.niallmurph.expensetrackerm3.ui.theme.Primary
 import com.niallmurph.expensetrackerm3.ui.theme.TopAppBarBackground
+import java.time.LocalDate
 import java.util.Calendar
 
 class AddScreen {
 
     val route = "add"
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @RequiresApi(Build.VERSION_CODES.O)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
     @Composable
     fun Create(navController: NavController) {
 
-        val recurrenceList = listOf("None", "Daily", "Weekly", "Monthly", "Annually")
+        val recurrenceList = listOf(
+            Recurrence.None,
+            Recurrence.Daily,
+            Recurrence.Weekly,
+            Recurrence.Monthly,
+            Recurrence.Yearly
+        )
         val selectedRecurrence = remember { mutableStateOf("None") }
         val categories = listOf("Groceries", "Entertainment", "Wifi", "Electricity", "Heating")
         val selectedCategory = remember { mutableStateOf(categories[0]) }
@@ -56,15 +68,11 @@ class AddScreen {
         var mDate = remember { mutableStateOf("${mCalendar.get(Calendar.MONTH) + 1}-${mCalendar.get(Calendar.DAY_OF_MONTH)}-${mCalendar.get(Calendar.YEAR)}") }
 
         val mDatePicker = DatePickerDialog(
-            mContext,
-            { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
-                mDate.value = "${selectedMonth + 1}-${selectedDay}-${selectedYear}"
-            },
-            mYear,
-            mMonth,
-            mDay
+            onDismissRequest = { /*TODO*/ },
+            onDateChange = {},
+            initialDate = LocalDate.now(),
+
         )
-        mDatePicker.datePicker.maxDate = mCalendar.timeInMillis
 
         Scaffold(
             topBar = {
@@ -101,7 +109,7 @@ class AddScreen {
                                 )
                             )
                         }
-                        Divider(startIndent = 16.dp, thickness = 1.dp, color = DividerColor)
+                        Divider(modifier = Modifier.padding(horizontal = 8.dp), thickness = 1.dp, color = DividerColor)
                         TableRow(label = "Recurrence") {
                             var recurrenceMenuExpanded = remember { mutableStateOf(false) }
                             TextButton(
@@ -114,9 +122,9 @@ class AddScreen {
                                 ) {
                                     recurrenceList.forEach { it ->
                                         DropdownMenuItem(
-                                            text = { Text(it) },
+                                            text = { Text(it.name) },
                                             onClick = {
-                                                selectedRecurrence.value = it
+                                                selectedRecurrence.value = it.name
                                                 recurrenceMenuExpanded.value = false
                                             }
                                         )
@@ -124,13 +132,13 @@ class AddScreen {
                                 }
                             }
                         }
-                        Divider(startIndent = 16.dp, thickness = 1.dp, color = DividerColor)
+                        Divider(modifier = Modifier.padding(horizontal = 8.dp), thickness = 1.dp, color = DividerColor)
                         TableRow(label = "Date") {
-                            TextButton(onClick = { mDatePicker.show() }) {
+                            TextButton(onClick = { /*TODO*/ }) {
                                 Text(mDate.value)
                             }
                         }
-                        Divider(startIndent = 16.dp, thickness = 1.dp, color = DividerColor)
+                        Divider(modifier = Modifier.padding(horizontal = 8.dp), thickness = 1.dp, color = DividerColor)
                         TableRow(label = "Note") {
                             UnstyledDefaultTextField(
                                 value = "",
@@ -146,7 +154,7 @@ class AddScreen {
                                 )
                             )
                         }
-                        Divider(startIndent = 16.dp, thickness = 1.dp, color = DividerColor)
+                        Divider(modifier = Modifier.padding(horizontal = 8.dp), thickness = 1.dp, color = DividerColor)
                         TableRow(label = "Category") {
                             var categoryMenuExpanded = remember { mutableStateOf(false) }
                             TextButton(
