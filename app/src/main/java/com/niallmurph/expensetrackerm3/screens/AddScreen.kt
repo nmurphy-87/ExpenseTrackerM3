@@ -2,6 +2,7 @@ package com.niallmurph.expensetrackerm3.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -21,6 +22,7 @@ import com.niallmurph.expensetrackerm3.components.UnstyledBasicTextField
 import com.niallmurph.expensetrackerm3.components.UnstyledDefaultTextField
 import com.niallmurph.expensetrackerm3.ui.theme.BackgroundElevated
 import com.niallmurph.expensetrackerm3.ui.theme.DividerColor
+import com.niallmurph.expensetrackerm3.ui.theme.Primary
 import com.niallmurph.expensetrackerm3.ui.theme.TopAppBarBackground
 
 class AddScreen {
@@ -33,6 +35,8 @@ class AddScreen {
 
         val recurrenceList = listOf("None", "Daily", "Weekly", "Monthly", "Annually")
         val selectedRecurrence = remember { mutableStateOf("None") }
+        val categories = listOf("Groceries", "Entertainment", "Wifi", "Electricity", "Heating")
+        val selectedCategory = remember { mutableStateOf(categories[0]) }
 
         Scaffold(
             topBar = {
@@ -111,7 +115,41 @@ class AddScreen {
                             )
                         }
                         Divider(startIndent = 16.dp, thickness = 1.dp, color = DividerColor)
-                        TableRow(label = "Category")
+                        TableRow(label = "Category") {
+                            var categoryMenuExpanded = remember { mutableStateOf(false) }
+                            TextButton(
+                                onClick = { categoryMenuExpanded.value = true }
+                            ) {
+                                Text(text = selectedCategory.value)
+                                DropdownMenu(
+                                    expanded = categoryMenuExpanded.value,
+                                    onDismissRequest = { categoryMenuExpanded.value = false }
+                                ) {
+                                    categories.forEach { category ->
+                                        DropdownMenuItem(
+                                            text = {
+                                                Row(
+                                                    verticalAlignment = Alignment.CenterVertically
+                                                ) {
+                                                    Surface(
+                                                        modifier = Modifier
+                                                            .size(12.dp)
+                                                            .padding(start = 2.dp, end = 4.dp),
+                                                        shape = CircleShape,
+                                                        color = Primary
+                                                    ){}
+                                                    Text(category)
+                                                }
+                                            },
+                                            onClick = {
+                                                selectedCategory.value = category
+                                                categoryMenuExpanded.value = false
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
                     Column(
                         modifier = Modifier.fillMaxWidth(),
