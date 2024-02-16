@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.niallmurph.expensetrackerm3.screens.AddScreen
+import com.niallmurph.expensetrackerm3.screens.Categories
 import com.niallmurph.expensetrackerm3.screens.ExpensesScreen
 import com.niallmurph.expensetrackerm3.screens.SettingsScreen
 import com.niallmurph.expensetrackerm3.ui.theme.ExpenseTrackerM3Theme
@@ -127,7 +128,7 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier
                                         .fillMaxSize()
                                 ){
-                                    Greeting(name = "Categories")
+                                    Categories().Create(navController = navController)
                                 }
                             }
                         }
