@@ -33,7 +33,7 @@ import com.niallmurph.expensetrackerm3.viewmodels.AddViewModel
 import java.time.LocalDate
 import java.util.Calendar
 
-class AddScree() {
+class AddScreen() {
 
     val route = "add"
 
@@ -51,29 +51,27 @@ class AddScree() {
             Recurrence.Monthly,
             Recurrence.Yearly
         )
-        val selectedRecurrence = remember { mutableStateOf("None") }
+
         val categories = listOf("Groceries", "Entertainment", "Wifi", "Electricity", "Heating")
-        val selectedCategory = remember { mutableStateOf(categories[0]) }
 
         val mContext = LocalContext.current
 
-        val mYear : Int
-        val mMonth : Int
-        val mDay : Int
+        val mYear: Int
+        val mMonth: Int
+        val mDay: Int
 
         val mCalendar = Calendar.getInstance()
         mYear = mCalendar.get(Calendar.YEAR)
         mMonth = mCalendar.get(Calendar.MONTH)
         mDay = mCalendar.get(Calendar.DAY_OF_MONTH)
 
-        var mDate = remember { mutableStateOf("${mCalendar.get(Calendar.MONTH) + 1}-${mCalendar.get(Calendar.DAY_OF_MONTH)}-${mCalendar.get(Calendar.YEAR)}") }
-
-        val mDatePicker = DatePickerDialog(
-            onDismissRequest = { /*TODO*/ },
-            onDateChange = {},
-            initialDate = LocalDate.now(),
-
-        )
+        var mDate = remember {
+            mutableStateOf(
+                "${mCalendar.get(Calendar.MONTH) + 1}-${mCalendar.get(Calendar.DAY_OF_MONTH)}-${
+                    mCalendar.get(Calendar.YEAR)
+                }"
+            )
+        }
 
         Scaffold(
             topBar = {
@@ -97,11 +95,10 @@ class AddScree() {
                             .background(BackgroundElevated)
                     ) {
                         TableRow(label = "Amount") {
-                            UnstyledBasicTextField(
-                                value = "Hello",
-                                onValueChange = { newVal ->
-
-                                },
+                            UnstyledDefaultTextField(
+                                value = state.amount,
+                                onValueChange = addViewModel::setAmount,
+                                placeholder = "0",
                                 textStyle = TextStyle(
                                     textAlign = TextAlign.End
                                 ),
@@ -110,13 +107,17 @@ class AddScree() {
                                 )
                             )
                         }
-                        Divider(modifier = Modifier.padding(horizontal = 8.dp), thickness = 1.dp, color = DividerColor)
+                        Divider(
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                            thickness = 1.dp,
+                            color = DividerColor
+                        )
                         TableRow(label = "Recurrence") {
                             var recurrenceMenuExpanded = remember { mutableStateOf(false) }
                             TextButton(
                                 onClick = { recurrenceMenuExpanded.value = true }
                             ) {
-                                Text(text = selectedRecurrence.value)
+                                Text(text = state.recurrence.name)
                                 DropdownMenu(
                                     expanded = recurrenceMenuExpanded.value,
                                     onDismissRequest = { recurrenceMenuExpanded.value = false }
@@ -125,7 +126,7 @@ class AddScree() {
                                         DropdownMenuItem(
                                             text = { Text(it.name) },
                                             onClick = {
-                                                selectedRecurrence.value = it.name
+                                                addViewModel.setRecurrence(it)
                                                 recurrenceMenuExpanded.value = false
                                             }
                                         )
@@ -133,19 +134,39 @@ class AddScree() {
                                 }
                             }
                         }
-                        Divider(modifier = Modifier.padding(horizontal = 8.dp), thickness = 1.dp, color = DividerColor)
+                        Divider(
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                            thickness = 1.dp,
+                            color = DividerColor
+                        )
+                        val datePickerShowing = remember { mutableStateOf(false) }
                         TableRow(label = "Date") {
-                            TextButton(onClick = { /*TODO*/ }) {
-                                Text(mDate.value)
+                            TextButton(onClick = { datePickerShowing.value = true }) {
+                                Text(state.date.toString())
+                            }
+                            if (datePickerShowing.value) {
+                                DatePickerDialog(
+                                    onDismissRequest = { datePickerShowing.value = false },
+                                    onDateChange = {
+                                        addViewModel.setDate(it)
+                                        datePickerShowing.value = false
+                                    },
+                                    initialDate = state.date,
+                                    title = {
+                                        Text("Please select a date", style = MaterialTheme.typography.headlineMedium)
+                                    }
+                                )
                             }
                         }
-                        Divider(modifier = Modifier.padding(horizontal = 8.dp), thickness = 1.dp, color = DividerColor)
+                        Divider(
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                            thickness = 1.dp,
+                            color = DividerColor
+                        )
                         TableRow(label = "Note") {
                             UnstyledDefaultTextField(
-                                value = "",
-                                onValueChange = { newVal ->
-
-                                },
+                                value = state.note,
+                                onValueChange = addViewModel::setNote,
                                 placeholder = "Add notes",
                                 textStyle = TextStyle(
                                     textAlign = TextAlign.End
@@ -155,13 +176,17 @@ class AddScree() {
                                 )
                             )
                         }
-                        Divider(modifier = Modifier.padding(horizontal = 8.dp), thickness = 1.dp, color = DividerColor)
+                        Divider(
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                            thickness = 1.dp,
+                            color = DividerColor
+                        )
                         TableRow(label = "Category") {
                             var categoryMenuExpanded = remember { mutableStateOf(false) }
                             TextButton(
                                 onClick = { categoryMenuExpanded.value = true }
                             ) {
-                                Text(text = selectedCategory.value)
+                                Text(text = state.category ?: "Select a Category")
                                 DropdownMenu(
                                     expanded = categoryMenuExpanded.value,
                                     onDismissRequest = { categoryMenuExpanded.value = false }
@@ -178,12 +203,12 @@ class AddScree() {
                                                             .padding(start = 2.dp, end = 4.dp),
                                                         shape = CircleShape,
                                                         color = Primary
-                                                    ){}
+                                                    ) {}
                                                     Text(category)
                                                 }
                                             },
                                             onClick = {
-                                                selectedCategory.value = category
+                                                addViewModel.setCategory(category)
                                                 categoryMenuExpanded.value = false
                                             }
                                         )
@@ -198,7 +223,7 @@ class AddScree() {
                     ) {
                         Spacer(modifier = Modifier.height(32.dp))
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = addViewModel::submitExpense,
                             shape = RoundedCornerShape(8.dp)
                         ) {
                             Text("Submit Expense")

@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import com.niallmurph.expensetrackerm3.ui.theme.Primary
 import com.niallmurph.expensetrackerm3.ui.theme.TextPrimary
@@ -29,7 +30,9 @@ fun UnstyledBasicTextField(
         .wrapContentHeight(align = Alignment.CenterVertically),
     textStyle: TextStyle,
     cursorBrush: Brush = SolidColor(Primary),
-    keyboardOptions: KeyboardOptions
+    keyboardOptions: KeyboardOptions,
+    singleLine : Boolean = true,
+    maxLines : Int = 1
 ) {
     BasicTextField(
         value = value,
@@ -42,6 +45,8 @@ fun UnstyledBasicTextField(
             )
         ),
         keyboardOptions = keyboardOptions,
+        singleLine = singleLine,
+        maxLines = maxLines,
         cursorBrush = cursorBrush
     )
 }
@@ -55,9 +60,10 @@ fun UnstyledDefaultTextField(
         .padding(4.dp)
         .defaultMinSize(minWidth = 80.dp, minHeight = 40.dp)
         .wrapContentHeight(align = Alignment.CenterVertically),
-    placeholder : String = "",
+    placeholder : String? = null,
     textStyle: TextStyle,
-    keyboardOptions: KeyboardOptions
+    keyboardOptions: KeyboardOptions,
+    maxLines : Int = 1
 ) {
     TextField(
         value = value,
@@ -65,9 +71,10 @@ fun UnstyledDefaultTextField(
         modifier = modifier,
         textStyle = textStyle,
         placeholder = {
-            Text(text = placeholder)
+            if(!placeholder.isNullOrEmpty()) Text(placeholder)
         },
         keyboardOptions = keyboardOptions,
+        maxLines = maxLines,
         colors = TextFieldDefaults.textFieldColors(
             containerColor = Color.Transparent,
             textColor = TextPrimary,
