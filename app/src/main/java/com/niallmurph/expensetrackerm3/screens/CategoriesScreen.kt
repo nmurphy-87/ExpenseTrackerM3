@@ -4,10 +4,14 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,14 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.github.skydoves.colorpicker.compose.AlphaTile
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
-import com.niallmurph.expensetrackerm3.Greeting
 import com.niallmurph.expensetrackerm3.components.TableRow
 import com.niallmurph.expensetrackerm3.ui.theme.BackgroundElevated
 import com.niallmurph.expensetrackerm3.ui.theme.DividerColor
@@ -82,49 +84,47 @@ class CategoriesScreen {
                         modifier = Modifier
                             .padding(16.dp)
                             .fillMaxWidth()
-                            .clip(shape = RoundedCornerShape(6.dp))
-                            .background(BackgroundElevated)
+                            .weight(1f)
                     ) {
-                        TableRow(
-                            label = "Groceries",
-                        )
-                        Divider(
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                            thickness = 1.dp,
-                            color = DividerColor
-                        )
-                        TableRow(
-                            label = "Entertainment",
-                        )
-                        Divider(
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                            thickness = 1.dp,
-                            color = DividerColor
-                        )
-                        TableRow(
-                            label = "Alcohol",
-                        )
-                        Divider(
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                            thickness = 1.dp,
-                            color = DividerColor
-                        )
-                        TableRow(
-                            label = "Bills",
-                        )
-                        Divider(
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                            thickness = 1.dp,
-                            color = DividerColor
-                        )
-                        TableRow(
-                            label = "Loan Repayments",
-                        )
+                        LazyColumn(
+                            modifier = Modifier
+                                .clip(shape = RoundedCornerShape(6.dp))
+                                .background(BackgroundElevated)
+                        ) {
+                            itemsIndexed(state.categories) { index, category ->
+                                TableRow{
+                                    Row(
+                                        modifier = Modifier.padding(horizontal = 12.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ){
+                                        Surface(
+                                            color = category.colour,
+                                            shape = CircleShape,
+                                            border = BorderStroke(
+                                              width = 1.dp,
+                                              color = Color.DarkGray
+                                            ),
+                                            modifier = Modifier.size(16.dp)
+                                        ) {}
+                                        Text(text = category.name, modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp))
+                                    }
+                                }
+                                if (index <= state.categories.size - 2) {
+                                    Divider(
+                                        modifier = Modifier.padding(horizontal = 8.dp),
+                                        thickness = 1.dp,
+                                        color = DividerColor
+                                    )
+                                }
+                            }
+                        }
                     }
                     Row(
                         modifier = Modifier
                             .padding(16.dp)
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         if (state.colourPickerShowing) {
                             Dialog(onDismissRequest = { viewModel.hideColourPicker() }) {
@@ -190,6 +190,21 @@ class CategoriesScreen {
                                 color = Color.DarkGray
                             )
                         ) {}
+                        OutlinedTextField(
+                            value = state.newCategoryName,
+                            onValueChange = viewModel::setNewCategoryName,
+                            placeholder = {
+                                Text(text = "Add a new category")
+                            }
+                        )
+                        IconButton(
+                            onClick = viewModel::createNewCategory
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Send,
+                                contentDescription = "Save Category"
+                            )
+                        }
                     }
                 }
 
