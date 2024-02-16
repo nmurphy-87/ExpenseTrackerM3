@@ -61,7 +61,7 @@ class SettingsScreen {
                             },
                             hasArrow = true
                         )
-                        Divider(startIndent = 16.dp, thickness = 1.dp, color = DividerColor)
+                        Divider(modifier = Modifier.padding(horizontal = 8.dp), thickness = 1.dp, color = DividerColor)
                         TableRow(label = "Delete All Data", isDestructive = true)
                     }
                 }
