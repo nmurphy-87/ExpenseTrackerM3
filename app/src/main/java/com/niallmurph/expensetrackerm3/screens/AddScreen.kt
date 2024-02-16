@@ -94,7 +94,7 @@ class AddScreen() {
                             .clip(shape = RoundedCornerShape(6.dp))
                             .background(BackgroundElevated)
                     ) {
-                        TableRow(label = "Amount") {
+                        TableRow(label = "Amount", detailContent = {
                             UnstyledDefaultTextField(
                                 value = state.amount,
                                 onValueChange = addViewModel::setAmount,
@@ -107,12 +107,15 @@ class AddScreen() {
                                 )
                             )
                         }
+                        ) {
+
+                        }
                         Divider(
                             modifier = Modifier.padding(horizontal = 8.dp),
                             thickness = 1.dp,
                             color = DividerColor
                         )
-                        TableRow(label = "Recurrence") {
+                        TableRow(label = "Recurrence", detailContent = {
                             var recurrenceMenuExpanded = remember { mutableStateOf(false) }
                             TextButton(
                                 onClick = { recurrenceMenuExpanded.value = true }
@@ -134,13 +137,16 @@ class AddScreen() {
                                 }
                             }
                         }
+                        ) {
+
+                        }
                         Divider(
                             modifier = Modifier.padding(horizontal = 8.dp),
                             thickness = 1.dp,
                             color = DividerColor
                         )
                         val datePickerShowing = remember { mutableStateOf(false) }
-                        TableRow(label = "Date") {
+                        TableRow(label = "Date", detailContent = {
                             TextButton(onClick = { datePickerShowing.value = true }) {
                                 Text(state.date.toString())
                             }
@@ -153,17 +159,23 @@ class AddScreen() {
                                     },
                                     initialDate = state.date,
                                     title = {
-                                        Text("Please select a date", style = MaterialTheme.typography.headlineMedium)
+                                        Text(
+                                            "Please select a date",
+                                            style = MaterialTheme.typography.headlineMedium
+                                        )
                                     }
                                 )
                             }
+                        }
+                        ) {
+
                         }
                         Divider(
                             modifier = Modifier.padding(horizontal = 8.dp),
                             thickness = 1.dp,
                             color = DividerColor
                         )
-                        TableRow(label = "Note") {
+                        TableRow(label = "Note", detailContent = {
                             UnstyledDefaultTextField(
                                 value = state.note,
                                 onValueChange = addViewModel::setNote,
@@ -176,12 +188,15 @@ class AddScreen() {
                                 )
                             )
                         }
+                        ) {
+
+                        }
                         Divider(
                             modifier = Modifier.padding(horizontal = 8.dp),
                             thickness = 1.dp,
                             color = DividerColor
                         )
-                        TableRow(label = "Category") {
+                        TableRow(label = "Category", detailContent = {
                             var categoryMenuExpanded = remember { mutableStateOf(false) }
                             TextButton(
                                 onClick = { categoryMenuExpanded.value = true }
@@ -215,6 +230,9 @@ class AddScreen() {
                                     }
                                 }
                             }
+                        }
+                        ) {
+
                         }
                     }
                     Column(

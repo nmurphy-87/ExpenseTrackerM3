@@ -21,10 +21,11 @@ import com.niallmurph.expensetrackerm3.ui.theme.Typography
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun TableRow(
-    label: String,
+    label: String ? = null,
     modifier: Modifier = Modifier,
     hasArrow: Boolean = false,
     isDestructive: Boolean = false,
+    detailContent: (@Composable RowScope.() -> Unit)? = null,
     content: (@Composable RowScope.() -> Unit)? = null
 ) {
 
@@ -37,18 +38,23 @@ fun TableRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = label,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
-            style = Typography.bodyMedium,
-            color = textColour
-        )
+        if(label != null){
+            Text(
+                text = label,
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
+                style = Typography.bodyMedium,
+                color = textColour
+            )
+        }
         if (hasArrow) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_arrow_forward),
                 contentDescription = "Forward chevron",
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
             )
+        }
+        if(detailContent != null){
+            detailContent()
         }
         if(content != null) {
             content()
