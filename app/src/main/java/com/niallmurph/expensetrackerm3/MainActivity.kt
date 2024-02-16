@@ -6,19 +6,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.niallmurph.expensetrackerm3.screens.AddScreen
-import com.niallmurph.expensetrackerm3.screens.Categories
+import com.niallmurph.expensetrackerm3.screens.CategoriesScreen
 import com.niallmurph.expensetrackerm3.screens.ExpensesScreen
 import com.niallmurph.expensetrackerm3.screens.SettingsScreen
 import com.niallmurph.expensetrackerm3.ui.theme.ExpenseTrackerM3Theme
@@ -35,100 +37,123 @@ class MainActivity : ComponentActivity() {
 
                 val navController = rememberNavController()
                 val backStackEntry = navController.currentBackStackEntryAsState()
+                val navBackEntry by navController.currentBackStackEntryAsState()
+                val bottomNavBarVisibility = rememberSaveable { mutableStateOf(true) }
+
+                when(navBackEntry?.destination?.route){
+                    "settings/categories" -> {
+                        bottomNavBarVisibility.value = false
+                    }
+                    else -> {
+                        bottomNavBarVisibility.value = true
+                    }
+                }
 
                 Scaffold(
                     bottomBar = {
-                        NavigationBar(containerColor = TopAppBarBackground) {
-                            NavigationBarItem(
-                                selected = backStackEntry.value?.destination?.route.equals(ExpensesScreen().route),
-                                onClick = { navController.navigate(ExpensesScreen().route) },
-                                label = {
-                                    Text("Expenses")
-                                },
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_expense),
-                                        contentDescription = "Expenses Icon"
-                                    )
-                                }
-                            )
-                            NavigationBarItem(
-                                selected = backStackEntry.value?.destination?.route.equals("reports"),
-                                onClick = { navController.navigate("reports") },
-                                label = {
-                                    Text("Reports")
-                                },
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_bar_chart),
-                                        contentDescription = "Reports Icon"
-                                    )
-                                }
-                            )
-                            NavigationBarItem(
-                                selected = backStackEntry.value?.destination?.route.equals("add"),
-                                onClick = { navController.navigate("add") },
-                                label = {
-                                    Text("Add")
-                                },
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_add),
-                                        contentDescription = "Add Icon"
-                                    )
-                                }
-                            )
-                            NavigationBarItem(
-                                selected = backStackEntry.value?.destination?.route?.startsWith("settings") ?: false,
-                                onClick = { navController.navigate("settings") },
-                                label = {
-                                    Text("Settings")
-                                },
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_settings),
-                                        contentDescription = "Settings Icon"
-                                    )
-                                }
-                            )
+                        AnimatedVisibility(
+                            visible = bottomNavBarVisibility.value
+                        ) {
+                            NavigationBar(containerColor = TopAppBarBackground) {
+                                NavigationBarItem(
+                                    selected = backStackEntry.value?.destination?.route.equals(
+                                        ExpensesScreen().route
+                                    ),
+                                    onClick = { navController.navigate(ExpensesScreen().route) },
+                                    label = {
+                                        Text("Expenses")
+                                    },
+                                    icon = {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_expense),
+                                            contentDescription = "Expenses Icon"
+                                        )
+                                    }
+                                )
+                                NavigationBarItem(
+                                    selected = backStackEntry.value?.destination?.route.equals("reports"),
+                                    onClick = { navController.navigate("reports") },
+                                    label = {
+                                        Text("Reports")
+                                    },
+                                    icon = {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_bar_chart),
+                                            contentDescription = "Reports Icon"
+                                        )
+                                    }
+                                )
+                                NavigationBarItem(
+                                    selected = backStackEntry.value?.destination?.route.equals("add"),
+                                    onClick = { navController.navigate("add") },
+                                    label = {
+                                        Text("Add")
+                                    },
+                                    icon = {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_add),
+                                            contentDescription = "Add Icon"
+                                        )
+                                    }
+                                )
+                                NavigationBarItem(
+                                    selected = backStackEntry.value?.destination?.route?.startsWith(
+                                        "settings"
+                                    ) ?: false,
+                                    onClick = { navController.navigate("settings") },
+                                    label = {
+                                        Text("Settings")
+                                    },
+                                    icon = {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_settings),
+                                            contentDescription = "Settings Icon"
+                                        )
+                                    }
+                                )
+                            }
                         }
+
                     },
                     content = {
 
-                        NavHost(navController = navController, startDestination = ExpensesScreen().route){
-                            composable(ExpensesScreen().route){
+                        NavHost(
+                            navController = navController,
+                            startDestination = ExpensesScreen().route
+                        ) {
+                            composable(ExpensesScreen().route) {
                                 ExpensesScreen().Create(navController = navController)
                             }
-                            composable("reports"){
+                            composable("reports") {
                                 Surface(
                                     modifier = Modifier
                                         .fillMaxSize()
-                                ){
+                                ) {
                                     Greeting(name = "Reports")
                                 }
                             }
-                            composable("add"){
+                            composable("add") {
                                 Surface(
                                     modifier = Modifier
                                         .fillMaxSize()
-                                ){
+                                ) {
                                     AddScreen().Create(navController = navController)
                                 }
                             }
-                            composable("settings"){
+                            composable("settings") {
                                 Surface(
                                     modifier = Modifier
                                         .fillMaxSize()
-                                ){
+                                ) {
                                     SettingsScreen().Create(navController = navController)
                                 }
                             }
-                            composable("settings/categories"){
+                            composable("settings/categories") {
                                 Surface(
                                     modifier = Modifier
                                         .fillMaxSize()
-                                ){
-                                    Categories().Create(navController = navController)
+                                ) {
+                                    CategoriesScreen().Create(navController = navController)
                                 }
                             }
                         }
