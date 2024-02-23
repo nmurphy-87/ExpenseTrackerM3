@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Send
@@ -94,19 +95,28 @@ class CategoriesScreen {
                             itemsIndexed(state.categories) { index, category ->
                                 TableRow{
                                     Row(
-                                        modifier = Modifier.padding(horizontal = 12.dp),
-                                        verticalAlignment = Alignment.CenterVertically
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween
                                     ){
-                                        Surface(
-                                            color = category.colour,
-                                            shape = CircleShape,
-                                            border = BorderStroke(
-                                              width = 1.dp,
-                                              color = Color.DarkGray
-                                            ),
-                                            modifier = Modifier.size(16.dp)
-                                        ) {}
-                                        Text(text = category.name, modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp))
+                                        Row(
+                                            modifier = Modifier.padding(horizontal = 12.dp),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ){
+                                            Surface(
+                                                color = category.colour,
+                                                shape = CircleShape,
+                                                border = BorderStroke(
+                                                    width = 1.dp,
+                                                    color = Color.DarkGray
+                                                ),
+                                                modifier = Modifier.size(16.dp)
+                                            ) {}
+                                            Text(text = category.name, modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp))
+                                        }
+                                        IconButton(onClick = { viewModel.deleteCategory(category) }) {
+                                            Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete Icon")
+                                        }
                                     }
                                 }
                                 if (index <= state.categories.size - 2) {
