@@ -232,7 +232,6 @@ class AddScreen() {
                             }
                         }
                         ) {
-
                         }
                     }
                     Column(
