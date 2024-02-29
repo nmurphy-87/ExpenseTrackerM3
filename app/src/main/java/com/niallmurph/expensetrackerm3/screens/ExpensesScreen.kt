@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.niallmurph.expensetrackerm3.models.Recurrence
@@ -26,7 +27,6 @@ class ExpensesScreen {
         val state by viewModel.uiState.collectAsState()
 
         val recurrenceList = listOf(
-            Recurrence.None,
             Recurrence.Daily,
             Recurrence.Weekly,
             Recurrence.Monthly,
@@ -65,7 +65,7 @@ class ExpensesScreen {
                                 expanded = recurrenceMenuExpanded.value,
                                 onDismissRequest = { recurrenceMenuExpanded.value = false }
                             ) {
-                                recurrenceList.forEach { it ->
+                                recurrenceList.forEach {
                                     DropdownMenuItem(
                                         text = { Text(it.target) },
                                         onClick = {
@@ -76,6 +76,26 @@ class ExpensesScreen {
                                 }
                             }
                         }
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ){
+                        Text(
+                            text = "$",
+                            modifier = Modifier
+                                .padding(horizontal = 4.dp),
+                            style = MaterialTheme.typography.headlineSmall
+                        )
+                        Text(
+                            text = "${state.sumTotal}",
+                            modifier = Modifier
+                                .padding(horizontal = 4.dp),
+                            style = MaterialTheme.typography.headlineLarge,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
             }
