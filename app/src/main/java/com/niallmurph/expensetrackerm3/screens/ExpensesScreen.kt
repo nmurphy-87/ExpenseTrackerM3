@@ -1,17 +1,20 @@
 package com.niallmurph.expensetrackerm3.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.niallmurph.expensetrackerm3.Greeting
+import androidx.navigation.compose.rememberNavController
+import com.niallmurph.expensetrackerm3.models.Recurrence
 import com.niallmurph.expensetrackerm3.ui.theme.TopAppBarBackground
+import com.niallmurph.expensetrackerm3.viewmodels.ExpensesViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 class ExpensesScreen {
 
@@ -19,7 +22,19 @@ class ExpensesScreen {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun Create(navController: NavController) {
+    fun Create(navController: NavController, viewModel: ExpensesViewModel = viewModel()) {
+
+        val state by viewModel.uiState.collectAsState()
+
+        val recurrenceList = listOf(
+            Recurrence.Daily,
+            Recurrence.Weekly,
+            Recurrence.Monthly,
+            Recurrence.Yearly
+        )
+
+        val recurrenceMenuExpanded = remember { mutableStateOf(false) }
+
         Scaffold(
             topBar = {
                  SmallTopAppBar(
@@ -33,16 +48,66 @@ class ExpensesScreen {
                 Column(
                     modifier = Modifier
                         .padding(innerPadding)
-                        .fillMaxSize(),
-                    Arrangement.Center,
-                    Alignment.CenterHorizontally
+                        .fillMaxSize()
                 ) {
-                    Text("Expenses Screen", fontSize = 32.sp)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Text("Total For:", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+                        TextButton(
+                            onClick = { recurrenceMenuExpanded.value = true }
+                        ) {
+                            Text(text = state.recurrence.target, style = MaterialTheme.typography.bodyLarge)
+                            DropdownMenu(
+                                expanded = recurrenceMenuExpanded.value,
+                                onDismissRequest = { recurrenceMenuExpanded.value = false }
+                            ) {
+                                recurrenceList.forEach {
+                                    DropdownMenuItem(
+                                        text = { Text(it.target) },
+                                        onClick = {
+                                            viewModel.setRecurrence(it)
+                                            recurrenceMenuExpanded.value = false
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ){
+                        Text(
+                            text = "$",
+                            modifier = Modifier
+                                .padding(horizontal = 4.dp),
+                            style = MaterialTheme.typography.headlineSmall
+                        )
+                        Text(
+                            text = "${state.sumTotal}",
+                            modifier = Modifier
+                                .padding(horizontal = 4.dp),
+                            style = MaterialTheme.typography.headlineLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         )
 
 
+    }
+
+    @Preview(uiMode = UI_MODE_NIGHT_YES)
+    @Composable
+    fun PreviewExpensesScreen(){
+        Create(navController = rememberNavController())
     }
 
 }

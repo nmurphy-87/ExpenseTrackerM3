@@ -22,7 +22,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.marosseleng.compose.material3.datetimepickers.date.ui.dialog.DatePickerDialog
 import com.niallmurph.expensetrackerm3.components.TableRow
-import com.niallmurph.expensetrackerm3.components.UnstyledBasicTextField
 import com.niallmurph.expensetrackerm3.components.UnstyledDefaultTextField
 import com.niallmurph.expensetrackerm3.models.Recurrence
 import com.niallmurph.expensetrackerm3.ui.theme.BackgroundElevated
@@ -30,7 +29,6 @@ import com.niallmurph.expensetrackerm3.ui.theme.DividerColor
 import com.niallmurph.expensetrackerm3.ui.theme.Primary
 import com.niallmurph.expensetrackerm3.ui.theme.TopAppBarBackground
 import com.niallmurph.expensetrackerm3.viewmodels.AddViewModel
-import java.time.LocalDate
 import java.util.Calendar
 
 class AddScreen() {
