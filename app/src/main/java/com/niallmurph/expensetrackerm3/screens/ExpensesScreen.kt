@@ -1,6 +1,8 @@
 package com.niallmurph.expensetrackerm3.screens
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -15,11 +17,14 @@ import com.niallmurph.expensetrackerm3.models.Recurrence
 import com.niallmurph.expensetrackerm3.ui.theme.TopAppBarBackground
 import com.niallmurph.expensetrackerm3.viewmodels.ExpensesViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.niallmurph.expensetrackerm3.components.ExpensesList
+import com.niallmurph.expensetrackerm3.mock.mockExpenses
 
 class ExpensesScreen {
 
     val route = "expenses"
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Create(navController: NavController, viewModel: ExpensesViewModel = viewModel()) {
@@ -97,6 +102,8 @@ class ExpensesScreen {
                             fontWeight = FontWeight.Bold
                         )
                     }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    ExpensesList(expenses = mockExpenses)
                 }
             }
         )
@@ -104,6 +111,7 @@ class ExpensesScreen {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Preview(uiMode = UI_MODE_NIGHT_YES)
     @Composable
     fun PreviewExpensesScreen(){
