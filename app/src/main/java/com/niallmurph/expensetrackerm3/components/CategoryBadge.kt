@@ -27,5 +27,3 @@ fun CategoryBadge(category: Category){
         )
     }
 }
-
-//comment to push change
