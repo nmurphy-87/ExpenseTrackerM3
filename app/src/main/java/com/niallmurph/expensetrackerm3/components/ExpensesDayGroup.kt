@@ -33,11 +33,11 @@ fun ExpensesDayGroup(date: LocalDate, expenses: DayExpenses) {
             style = MaterialTheme.typography.headlineMedium,
             color = Color.LightGray
         )
-        Divider()
+        Divider(modifier = Modifier.padding(2.dp))
         expenses.expenses.forEach{ expense ->  
             ExpenseRow(expense = expense)
         }
-        Divider()
+        Divider(modifier = Modifier.padding(2.dp))
         Row(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {

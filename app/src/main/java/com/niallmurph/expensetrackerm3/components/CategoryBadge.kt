@@ -16,7 +16,7 @@ fun CategoryBadge(category: Category){
         modifier = Modifier
             .padding(horizontal = 6.dp, vertical = 2.dp),
         shape = RoundedCornerShape(6.dp),
-        color = category.colour.copy(alpha = 0.4f)
+        color = category.colour.copy(alpha = 0.25f)
     ) {
         Text(
             text = category.name,

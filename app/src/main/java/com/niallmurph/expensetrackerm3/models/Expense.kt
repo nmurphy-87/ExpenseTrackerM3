@@ -16,14 +16,40 @@ data class Expense(
 
 data class DayExpenses(
     val expenses : MutableList<Expense>,
-    val total : Double
+    var total : Double
 )
+
+//@RequiresApi(Build.VERSION_CODES.O)
+//fun List<Expense>.groupedByDay(): Map<LocalDate, DayExpenses>{
+//
+//    var dataMap : MutableMap<LocalDate, DayExpenses> = mutableMapOf()
+//
+//    this.forEach { expense ->
+//        val date = expense.date
+//
+//        if(dataMap[date] == null) {
+//            dataMap[date] = DayExpenses(
+//                expenses = mutableListOf(),
+//                total = 0.0
+//            )
+//        }
+//
+//        dataMap[date]!!.expenses.add(expense)
+//        dataMap[date]!!.total = dataMap[date]!!.total!!.plus(expense.amount)
+//    }
+//
+//    dataMap.values.forEach { expenses ->
+//        expenses.expenses.sortBy { expense -> expense.date }
+//    }
+//
+//    return dataMap.toSortedMap(compareByDescending { it })
+//}
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun List<Expense>.groupedByDay(): Map<LocalDate, DayExpenses>{
-    // create empty map
-    val dataMap : MutableMap<LocalDate, DayExpenses> = mutableMapOf()
-    //Loop through the list
+
+    var dataMap : MutableMap<LocalDate, DayExpenses> = mutableMapOf()
+
     this.forEach { expense ->
         val date = expense.date.toLocalDate()
 
@@ -34,31 +60,12 @@ fun List<Expense>.groupedByDay(): Map<LocalDate, DayExpenses>{
             )
         }
 
-        dataMap[date]?.expenses?.add(expense)
-        dataMap[date]?.total?.plus(expense.amount)
+        dataMap[date]!!.expenses.add(expense)
+        dataMap[date]!!.total = dataMap[date]!!.total!!.plus(expense.amount)
     }
-    //Push the expense in its own day
-    return dataMap
-    //Return the map
-}
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun List<Expense>.sort(): Map<LocalDateTime, DayExpenses>{
-
-    val dataMap : MutableMap<LocalDateTime, DayExpenses> = mutableMapOf()
-
-    this.forEach { expense ->
-        val date = expense.date
-
-        if(dataMap[date] == null) {
-            dataMap[date] = DayExpenses(
-                expenses = mutableListOf(),
-                total = 0.0
-            )
-        }
-
-        dataMap[date]?.expenses?.add(expense)
-        dataMap[date]?.total?.plus(expense.amount)
+    dataMap.values.forEach { expenses ->
+        expenses.expenses.sortBy { expense -> expense.date }
     }
 
     return dataMap.toSortedMap(compareByDescending { it })
