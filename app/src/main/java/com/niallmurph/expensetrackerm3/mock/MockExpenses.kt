@@ -8,6 +8,7 @@ import com.niallmurph.expensetrackerm3.models.Expense
 import com.niallmurph.expensetrackerm3.models.Recurrence
 import io.github.serpro69.kfaker.Faker
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
 
 val faker = Faker()
@@ -17,7 +18,7 @@ val mockExpenses: List<Expense> = List(30) { index ->
     Expense(
         id = index,
         amount = faker.random.nextInt(min = 1, max = 999).toDouble(),
-        date = LocalDate.now().minus(
+        date = LocalDateTime.now().minus(
             faker.random.nextInt(min = 0, max = 3).toLong(),
             ChronoUnit.DAYS
         ),

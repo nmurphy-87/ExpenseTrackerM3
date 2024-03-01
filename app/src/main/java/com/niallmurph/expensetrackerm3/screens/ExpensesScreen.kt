@@ -111,6 +111,7 @@ class ExpensesScreen {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @Preview(uiMode = UI_MODE_NIGHT_YES)
     @Composable
     fun PreviewExpensesScreen(){

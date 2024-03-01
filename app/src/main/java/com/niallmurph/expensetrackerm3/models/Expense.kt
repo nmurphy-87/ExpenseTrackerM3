@@ -3,13 +3,14 @@ package com.niallmurph.expensetrackerm3.models
 import android.os.Build
 import androidx.annotation.RequiresApi
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class Expense(
     val id : Int,
     val amount : Double,
     val recurrence: Recurrence,
-    val date : LocalDate,
-    val note : String,
+    val date : LocalDateTime,
+    val note : String?,
     val category: Category
 )
 
@@ -24,7 +25,7 @@ fun List<Expense>.groupedByDay(): Map<LocalDate, DayExpenses>{
     val dataMap : MutableMap<LocalDate, DayExpenses> = mutableMapOf()
     //Loop through the list
     this.forEach { expense ->
-        val date = expense.date
+        val date = expense.date.toLocalDate()
 
         if(dataMap[date] == null) {
             dataMap[date] = DayExpenses(
@@ -42,9 +43,9 @@ fun List<Expense>.groupedByDay(): Map<LocalDate, DayExpenses>{
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun List<Expense>.sort(): Map<LocalDate, DayExpenses>{
+fun List<Expense>.sort(): Map<LocalDateTime, DayExpenses>{
 
-    val dataMap : MutableMap<LocalDate, DayExpenses> = mutableMapOf()
+    val dataMap : MutableMap<LocalDateTime, DayExpenses> = mutableMapOf()
 
     this.forEach { expense ->
         val date = expense.date
